@@ -25,7 +25,17 @@ pipeline {
 
  // --exit-code 1 \
 // --severity HIGH,CRITICAL \
-         stage('Trivy Security Scan') {
+ 
+
+   stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    sh 'mvn sonar:sonar -Dsonar.projectKey=simple-java-maven-app -Dsonar.projectName="simple-java-maven-app"'
+                }
+            }
+        }
+
+                stage('Trivy Security Scan') {
             steps {
                 sh '''
                 sudo docker run --rm \
@@ -34,7 +44,6 @@ pipeline {
                 aquasec/trivy image \
                 --format template \
                 --template "@/contrib/html.tpl" \
-               
                  -o /root/reports/trivy-report.html \
                 ${IMAGE_NAME}:${IMAGE_TAG}
                 '''
@@ -52,14 +61,6 @@ pipeline {
                 reportName: 'Trivy Security Report',
                 alwaysLinkToLastBuild: true
                 ])
-            }
-        }
-
-   stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('SonarQube') {
-                    sh 'mvn sonar:sonar -Dsonar.projectKey=simple-java-maven-app -Dsonar.projectName="simple-java-maven-app"'
-                }
             }
         }
         //  Optional: Push Docker image to a registry
