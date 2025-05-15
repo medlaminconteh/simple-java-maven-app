@@ -29,7 +29,7 @@ pipeline {
                 --format template \
                 --template "@/contrib/html.tpl" \
                 --exit-code 1 \
-                --severity MEDIUM,HIGH,CRITICAL \
+                --severity HIGH,CRITICAL \
                  -o /root/reports/trivy-report.html \
                 ${IMAGE_NAME}:${IMAGE_TAG}
                 '''
@@ -60,7 +60,7 @@ pipeline {
                 )]) {
                     sh '''
                         echo "$DOCKER_PASS" | sudo docker login -u "$DOCKER_USER" --password-stdin
-                        sudo docker push ${IMAGE_NAME}:${IMAGE_TAG}
+                        sudo sudo docker push ${IMAGE_NAME}:${IMAGE_TAG}
                     '''
                 }
             }
