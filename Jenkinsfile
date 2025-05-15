@@ -5,7 +5,7 @@ pipeline {
     }
     environment {
         sonarqube_token = credentials('sonar-secrets-id')
-        IMAGE_NAME = "medlamin13956814/updatedproduction"
+        IMAGE_NAME = "medlamin13956814/updatedproductionn"
         IMAGE_TAG = "latest"
     }
     options {
