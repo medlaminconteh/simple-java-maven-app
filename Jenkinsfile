@@ -38,7 +38,7 @@ pipeline {
            stage('Trivy Security Scan') {
             steps {
                 sh '''
-                docker run --rm \
+                sudo docker run --rm \
                 -v /var/run/docker.sock:/var/run/docker.sock \
                 -v $PWD:/root/reports \
                 aquasec/trivy image \
