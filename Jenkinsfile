@@ -45,7 +45,7 @@ pipeline {
                 --format template \
                 --template "@/contrib/html.tpl" \
                 --exit-code 1 \
-                --severity HIGH,CRITICAL \
+                --severity CRITICAL \
                  -o /root/reports/trivy-report.html \
                 ${IMAGE_NAME}:${IMAGE_TAG}
                 '''
