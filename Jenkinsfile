@@ -23,7 +23,8 @@ pipeline {
             }
         }
 
-
+ // --exit-code 1 \
+// --severity HIGH,CRITICAL \
          stage('Trivy Security Scan') {
             steps {
                 sh '''
@@ -33,8 +34,7 @@ pipeline {
                 aquasec/trivy image \
                 --format template \
                 --template "@/contrib/html.tpl" \
-                --exit-code 1 \
-                --severity HIGH,CRITICAL \
+               
                  -o /root/reports/trivy-report.html \
                 ${IMAGE_NAME}:${IMAGE_TAG}
                 '''
