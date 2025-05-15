@@ -35,15 +35,17 @@ pipeline {
             }
         }
 
-                stage('Trivy Security Scan') {
+           stage('Trivy Security Scan') {
             steps {
                 sh '''
-                sudo docker run --rm \
+                docker run --rm \
                 -v /var/run/docker.sock:/var/run/docker.sock \
                 -v $PWD:/root/reports \
                 aquasec/trivy image \
                 --format template \
                 --template "@/contrib/html.tpl" \
+                --exit-code 1 \
+                --severity HIGH,CRITICAL \
                  -o /root/reports/trivy-report.html \
                 ${IMAGE_NAME}:${IMAGE_TAG}
                 '''
@@ -63,6 +65,7 @@ pipeline {
                 ])
             }
         }
+
         //  Optional: Push Docker image to a registry
         stage('Push Docker Image') {
             steps {
