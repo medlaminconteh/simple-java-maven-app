@@ -3,6 +3,11 @@ pipeline {
      agent {
         label 'buildertwo'
     }
+    environment {
+        sonarqube_token = credentials('sonar-secrets-id')
+        IMAGE_NAME = "medlamin13956814/updatedproduction"
+        IMAGE_TAG = "latest"
+    }
     options {
         skipStagesAfterUnstable()
     }
@@ -50,6 +55,13 @@ pipeline {
             }
         }
 
+   stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    sh 'mvn sonar:sonar -Dsonar.projectKey=simple-java-maven-app -Dsonar.projectName="simple-java-maven-app"'
+                }
+            }
+        }
         //  Optional: Push Docker image to a registry
         stage('Push Docker Image') {
             steps {
@@ -90,13 +102,7 @@ pipeline {
             }
         }
 
-          stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('SonarQube') {
-                    sh 'mvn sonar:sonar -Dsonar.projectKey=simple-java-maven-app -Dsonar.projectName="simple-java-maven-app"'
-                }
-            }
-        }
+       
 
         stage('Test') {
             steps {
